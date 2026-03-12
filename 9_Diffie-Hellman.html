@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diffie-Hellman Key Exchange</title>
+    <script>
+        function powerMod(base, exp, mod) {
+            let result = 1;
+            base = base % mod;
+            while (exp > 0) {
+                if (exp % 2 === 1)
+                    result = (result * base) % mod;
+                exp = Math.floor(exp / 2);
+                base = (base * base) % mod;
+            }
+            return result;
+        }
+        function computeDH() {
+            let p = parseInt(document.getElementById("p").value);
+            let g = parseInt(document.getElementById("g").value);
+            let a = parseInt(document.getElementById("a").value);
+            let b = parseInt(document.getElementById("b").value);
+            // Public keys
+            let A = powerMod(g, a, p);
+            let B = powerMod(g, b, p);
+            // Shared secrets
+            let secretA = powerMod(B, a, p);
+            let secretB = powerMod(A, b, p);
+            document.getElementById("result").innerHTML =
+                "<b>Public Key of A:</b> " + A + "<br>" +
+                "<b>Public Key of B:</b> " + B + "<br>" +
+                "<b>Secret computed by A:</b> " + secretA + "<br>" +
+                "<b>Secret computed by B:</b> " + secretB;
+        }
+    </script>
+</head>
+<body>
+    <h2>Diffie-Hellman Key Exchange</h2>
+    Prime number (p): <input type="number" id="p" value="23"><br><br>
+    Primitive root (g): <input type="number" id="g" value="5"><br><br>
+    Private key of A (a): <input type="number" id="a" value="6"><br><br>
+    Private key of B (b): <input type="number" id="b" value="15"><br><br>
+    <button onclick="computeDH()">Compute Shared Key</button>
+    <h3 id="result"></h3>
+</body>
+</html>
